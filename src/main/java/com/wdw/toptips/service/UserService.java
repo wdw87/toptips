@@ -2,6 +2,7 @@ package com.wdw.toptips.service;
 
 import com.wdw.toptips.dao.LoginTicketDAO;
 import com.wdw.toptips.dao.UserDAO;
+import com.wdw.toptips.model.Hostholder;
 import com.wdw.toptips.model.LoginTicket;
 import com.wdw.toptips.model.User;
 import com.wdw.toptips.util.ToutiaoUtil;
@@ -18,6 +19,7 @@ public class UserService {
 
     @Autowired
     private LoginTicketDAO loginTicketDAO;
+
 
     public Map<String,Object> register(String username,String passsword){
         Map<String,Object> map = new HashMap<>();
@@ -67,7 +69,7 @@ public class UserService {
             map.put("msgname","用户名不存在");
             return map;
         }
-        if(ToutiaoUtil.MD5(passsword+ user.getSalt()) != user.getPassword()){
+        if(! ToutiaoUtil.MD5(passsword+ user.getSalt()).equals(user.getPassword()) ){
             map.put("msgpwd","密码错误");
             return map;
         }
@@ -76,6 +78,10 @@ public class UserService {
         //登陆
         map.put("ticket",addLoginTicket(user.getId()));
         return map;
+    }
+
+    public void logout(String ticket){
+        loginTicketDAO.updateStatus(ticket,1);
     }
 
     /**
