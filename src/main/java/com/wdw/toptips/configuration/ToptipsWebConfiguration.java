@@ -1,6 +1,7 @@
 package com.wdw.toptips.configuration;
 
 
+import com.wdw.toptips.interceptor.LoginRequiredIntercepter;
 import com.wdw.toptips.interceptor.PassportInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,9 +19,13 @@ public class ToptipsWebConfiguration implements WebMvcConfigurer {
     @Autowired
     PassportInterceptor passportInterceptor;
 
+    @Autowired
+    LoginRequiredIntercepter loginRequiredIntercepter;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         //注册定义好的拦截器passportInterceptor
         registry.addInterceptor(passportInterceptor);
+        registry.addInterceptor(loginRequiredIntercepter).addPathPatterns("/setting*");
     }
 }

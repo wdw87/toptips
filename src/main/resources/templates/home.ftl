@@ -221,8 +221,9 @@
         </div>
     </div>
 </div>
-
-<#--<script>window.loginpop = ${pop};</script>-->
+<#if pop??>
+<script>window.loginpop = ${pop};</script>
+</#if>
 <script type="text/javascript" src="/scripts/jquery.js"></script>
 <script type="text/javascript" src="/scripts/main/base/base.js"></script>
 <script type="text/javascript" src="/scripts/main/base/util.js"></script>
