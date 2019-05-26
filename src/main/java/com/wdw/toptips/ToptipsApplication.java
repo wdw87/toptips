@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class ToptipsApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ToptipsApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ToptipsApplication.class, args);
+    }
 
 }

@@ -13,6 +13,41 @@ import java.util.Map;
 public class ToutiaoUtil {
     private static final Logger logger = LoggerFactory.getLogger(ToutiaoUtil.class);
 
+    public static String QINIU_DOMAIN_PREFIX = "http://pryj34vzw.bkt.clouddn.com/";
+    public static String TOPTIPS_DOMAIN = "http://127.0.0.1:8080/";
+    public static String IMG_DIR = "D:/upload/";
+    private static String[] IMAGE_FILE_EXT = new String[]{"png", "jpg", "jpeg", "bmp"};
+
+    /**
+     * 根据文件名获取文件后缀名
+     *
+     * @param originalName
+     * @return
+     */
+    public static String getFileExt(String originalName) {
+        int dotPos = originalName.lastIndexOf(".");
+        if (dotPos < 0) {
+            return null;
+        }
+        return originalName.substring(dotPos + 1).toLowerCase();
+    }
+
+
+    /**
+     * 根据后缀名判断文件是否是图片
+     *
+     * @param fileExt
+     * @return
+     */
+    public static boolean isAllowedFile(String fileExt) {
+        for (String ext : IMAGE_FILE_EXT) {
+            if (ext.equals(fileExt)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static String getJSONString(int code) {
         JSONObject json = new JSONObject();
         json.put("code", code);

@@ -35,7 +35,7 @@
 
             <ul class="nav navbar-nav navbar-right">
                 <li class=""><a href="http://nowcoder.com/explore">发现</a></li>
-
+                <li class="js-share"><a href="javascript:void(0);">分享</a></li>
                 <#if user??>
                 <li class="js-login"><a href="javascript:void(0);">${user.name}</a></li>
                 <#else>
@@ -232,5 +232,15 @@
 <script type="text/javascript" src="/scripts/main/component/popupLogin.js"></script>
 <script type="text/javascript" src="/scripts/main/site/home.js"></script>
 
-
+<#--<script type="text/javascript" src="/scripts/jquery.js"></script>-->
+<#--<script type="text/javascript" src="/scripts/main/base/base.js"></script>-->
+<#--<script type="text/javascript" src="/scripts/main/base/util.js"></script>-->
+<#--<script type="text/javascript" src="/scripts/main/base/event.js"></script>-->
+<script type="text/javascript" src="/scripts/main/base/upload.js"></script>
+<#--<script type="text/javascript" src="/scripts/main/site/home.js"></script>-->
+<#--<script type="text/javascript" src="/scripts/main/component/component.js"></script>-->
+<#--<script type="text/javascript" src="/scripts/main/component/popup.js"></script>-->
+<#--<script type="text/javascript" src="/scripts/main/component/popupLogin.js"></script>-->
+<script type="text/javascript" src="/scripts/main/component/upload.js"></script>
+<script type="text/javascript" src="/scripts/main/component/popupUpload.js"></script>
 </body></html>

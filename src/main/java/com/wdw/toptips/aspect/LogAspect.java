@@ -17,11 +17,12 @@ public class LogAspect {
     private static final Logger logger = LoggerFactory.getLogger(LogAspect.class);
 
     @Before("execution(* com.wdw.toptips.controller.IndexController.*(..))")
-    public void beforeMethod(JoinPoint joinPoint){
+    public void beforeMethod(JoinPoint joinPoint) {
         logger.info("before method");
     }
+
     @After("execution(* com.wdw.toptips.controller.IndexController.*(..))")
-    public void afterMethod(JoinPoint joinPoint){
+    public void afterMethod(JoinPoint joinPoint) {
         logger.info("after method");
     }
 }
