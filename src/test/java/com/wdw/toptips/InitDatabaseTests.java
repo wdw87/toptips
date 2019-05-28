@@ -29,6 +29,7 @@ public class InitDatabaseTests {
 
     @Autowired
     LoginTicketDAO loginTicketDAO;
+
     @Test
     public void initData() {
         Random random = new Random();
@@ -59,12 +60,12 @@ public class InitDatabaseTests {
 
             LoginTicket ticket = new LoginTicket();
             ticket.setStatus(0);
-            ticket.setUserId(i+1);
+            ticket.setUserId(i + 1);
             ticket.setExpired(date);
-            ticket.setTicket(String.format("TICKET%d",i+1));
+            ticket.setTicket(String.format("TICKET%d", i + 1));
             loginTicketDAO.addTicket(ticket);
 
-            loginTicketDAO.updateStatus(ticket.getTicket(),1);
+            loginTicketDAO.updateStatus(ticket.getTicket(), 1);
         }
 
 
@@ -73,8 +74,8 @@ public class InitDatabaseTests {
         userDAO.deleteById(1);
         Assert.assertNull(userDAO.selectById(1));
 
-        Assert.assertEquals("TICKET2",loginTicketDAO.selectByTicket("TICKET2").getTicket());
-        
+        Assert.assertEquals("TICKET2", loginTicketDAO.selectByTicket("TICKET2").getTicket());
+
     }
 
 }

@@ -2,7 +2,6 @@ package com.wdw.toptips.dao;
 
 import com.wdw.toptips.model.User;
 import org.apache.ibatis.annotations.*;
-import org.springframework.stereotype.Repository;
 
 /**
  * 添加了@Mapper注解的接口在编译时回生成相应的类
@@ -24,7 +23,7 @@ public interface UserDAO {
     User selectByName(String name);
 
     @Update({"update ", TABLE_NAME, " set password=#{password} where id=#{id}"})
-    //@Update({"update user set password= #{password} where id=#{id}"})
+        //@Update({"update user set password= #{password} where id=#{id}"})
     void updatePassword(User user);
 
     @Delete({"delete from ", TABLE_NAME, " where id=#{id}"})

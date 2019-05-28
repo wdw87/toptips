@@ -12,15 +12,17 @@ public class Hostholder {
     //线程本地变量，对于同一个static ThreadLocal
     // 不同线程只能从中 get set remove 自己的变量，而不会影响其他线程的变量
     //用于存储本次访问的用户是谁
-    private static ThreadLocal<User> users = new  ThreadLocal<>();
+    private static ThreadLocal<User> users = new ThreadLocal<>();
 
-    public User getUser(){
+    public User getUser() {
         return users.get();
     }
-    public void setUser(User user){
+
+    public void setUser(User user) {
         users.set(user);
     }
-    public void clear(){
+
+    public void clear() {
         users.remove();
     }
 }

@@ -1,7 +1,6 @@
 package com.wdw.toptips.dao;
 
 import com.wdw.toptips.model.LoginTicket;
-import com.wdw.toptips.model.User;
 import org.apache.ibatis.annotations.*;
 
 /**
@@ -12,6 +11,7 @@ public interface LoginTicketDAO {
     String TABLE_NAME = "login_ticket";
     String INSERT_FIELDS = " user_id, ticket, expired, status ";
     String SELECT_FIELDS = " id, user_id, ticket, expired, status";
+
     //注意：mybatis自动匹配下划线命名和驼峰命名，#{ }中为Java变量名
     @Insert({"insert into ", TABLE_NAME, "(", INSERT_FIELDS,
             ") values (#{userId},#{ticket},#{expired},#{status})"})
@@ -21,6 +21,6 @@ public interface LoginTicketDAO {
     LoginTicket selectByTicket(String ticket);
 
     @Update({"update ", TABLE_NAME, " set status=#{status} where ticket=#{ticket}"})
-    //@Update({"update user set password= #{password} where id=#{id}"})
-    void updateStatus(@Param("ticket") String ticket,@Param("status") int status);
+        //@Update({"update user set password= #{password} where id=#{id}"})
+    void updateStatus(@Param("ticket") String ticket, @Param("status") int status);
 }

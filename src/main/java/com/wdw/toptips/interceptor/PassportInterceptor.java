@@ -17,6 +17,7 @@ import java.util.Date;
 
 /**
  * 拦截器
+ *
  * @Author: Wudw
  * @Date: 2019/5/20 20:38
  * @Version 1.0
@@ -32,25 +33,26 @@ public class PassportInterceptor implements HandlerInterceptor {
 
     @Autowired
     private Hostholder hostholder;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String ticket = null;
-        if(request.getCookies() != null){
-            for(Cookie cookie : request.getCookies()){
-                if(cookie.getName().equals("ticket")){
+        if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if (cookie.getName().equals("ticket")) {
                     ticket = cookie.getValue();
                     break;
                 }
             }
         }
-        if(ticket == null){
+        if (ticket == null) {
             return true;
-        }else{
+        } else {
             LoginTicket loginTicket = loginTicketDAO.selectByTicket(ticket);
-            if(loginTicket == null ||
+            if (loginTicket == null ||
                     loginTicket.getExpired().before(new Date()) ||
                     loginTicket.getStatus() != 0 ||
-                    userDAO.selectById(loginTicket.getUserId()) == null){
+                    userDAO.selectById(loginTicket.getUserId()) == null) {
                 return true;
             }
             User user = userDAO.selectById(loginTicket.getUserId());
@@ -62,8 +64,8 @@ public class PassportInterceptor implements HandlerInterceptor {
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         //与前端页面交互
-        if(modelAndView != null && hostholder.getUser() != null){
-            modelAndView.addObject("user",hostholder.getUser());
+        if (modelAndView != null && hostholder.getUser() != null) {
+            modelAndView.addObject("user", hostholder.getUser());
         }
     }
 
