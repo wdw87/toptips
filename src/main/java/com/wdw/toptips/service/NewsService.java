@@ -28,7 +28,6 @@ public class NewsService {
         return news.getId();
     }
 
-<<<<<<< HEAD
     public void updateCommentCount(int commentCount,int id){
         newsDao.updateNewsCommentCount(commentCount,id);
     }
@@ -37,8 +36,6 @@ public class NewsService {
         return newsDao.selectById(newsId);
     }
 
-=======
->>>>>>> 3cc66204b4719be79d987ead743b7e288db734aa
     /**
      * 将文件保存到本地
      *
