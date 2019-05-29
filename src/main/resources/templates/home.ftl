@@ -89,10 +89,10 @@
                         </div>
                         <div class="content-main">
                             <h3 class="title">
-                                <a target="_blank" rel="external nofollow" href="${vo.get("news").link}">${vo.get("news").title}</a>
+                                <a target="_blank" rel="external nofollow" href="/news/${vo.get("news").id}">${vo.get("news").title}</a>
                             </h3>
                             <div class="meta">
-                                ${vo.get("news").link}
+                                <a href="${vo.get("news").link}">${vo.get("news").link}</a>
                                 <span>
                                       <i class="fa icon-comment"></i> ${vo.get("news").commentCount}
                                  </span>

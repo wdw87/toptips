@@ -1,9 +1,8 @@
 package com.wdw.toptips.dao;
 
 import com.wdw.toptips.model.News;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
+import com.wdw.toptips.model.User;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -17,6 +16,12 @@ public interface NewsDAO {
             ") values (#{title},#{link},#{image},#{likeCount},#{commentCount},#{createdDate},#{userId})"})
     int addNews(News news);
 
+    @Select({"select ", SELECT_FIELDS, " from ", TABLE_NAME, " where id=#{id}"})
+    News selectById(int id);
+
     List<News> selectByUserIdAndOffset(@Param("userId") int userId, @Param("offset") int offset,
                                        @Param("limit") int limit);
+
+    @Update({"update ", TABLE_NAME, " set comment_count=#{commentCount} where id=#{id}"})
+    void updateNewsCommentCount(@Param("commentCount") int commentCount,@Param("id") int id);
 }

@@ -28,6 +28,14 @@ public class NewsService {
         return news.getId();
     }
 
+    public void updateCommentCount(int commentCount,int id){
+        newsDao.updateNewsCommentCount(commentCount,id);
+    }
+
+    public News getNewsById(int newsId){
+        return newsDao.selectById(newsId);
+    }
+
     /**
      * 将文件保存到本地
      *
