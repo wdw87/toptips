@@ -11,7 +11,7 @@
 
                 <div class="content" data-url="http://nowcoder.com/posts/5l3hjr">
                       <div class="content-img">
-                          <img src="${news.image}" alt="">
+                          <img  class="content-img" src="${news.image}" alt="">
                       </div>
                       <div class="content-main">
                           <h3 class="title">
@@ -87,7 +87,7 @@
                 <#list commentVOs as commentvo>
                 <div class="media">
                     <a class="media-left" href="http://nowcoder.com/u/210176">
-                        <img src="${commentvo.get("user").headUrl}">
+                        <img class="media-left" src="${commentvo.get("user").headUrl}">
                     </a>
                     <div class="media-body">
                         <h4 class="media-heading"> <small class="date">${commentvo.get("comment").createdDate?string('yyyy-MM-dd hh:mm:ss')}</small></h4>

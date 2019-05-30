@@ -1,5 +1,7 @@
 package com.wdw.toptips.controller;
 
+import com.wdw.toptips.dao.UserDAO;
+import com.wdw.toptips.model.Hostholder;
 import com.wdw.toptips.model.Message;
 import com.wdw.toptips.model.User;
 import com.wdw.toptips.model.ViewObject;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.swing.text.View;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -35,6 +38,37 @@ public class MessageController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    Hostholder hostholder;
+
+    @RequestMapping(path = {"/msg/list"},method = RequestMethod.GET)
+    public String getMessageList(Model model, @RequestParam("userId") int userId){
+        try{
+            if(hostholder.getUser() == null || hostholder.getUser().getId() != userId){
+                return "redirect:/";
+            }
+            int localUserId = hostholder.getUser().getId();
+            List<ViewObject> conversations = new ArrayList<>();
+            List<Message> conversationList = messageService.getConversationList(localUserId,0,10);
+            for(Message msg : conversationList){
+                ViewObject vo = new ViewObject();
+                vo.set("msg",msg);
+                int targetId = (msg.getFromId() == localUserId? localUserId:msg.getFromId());
+                User user = userService.getUser(targetId);
+                vo.set("user",user);
+                String conversationId = msg.getConversationId();
+                vo.set("unReadCnt",messageService.getUnReadCount(localUserId,conversationId));
+
+                conversations.add(vo);
+            }
+            model.addAttribute("conversations",conversations);
+        }catch (Exception e){
+            logger.error("获取消息列表失败 " + e.getMessage());
+        }
+
+        return "letter";
+    }
 
     @RequestMapping(path = {"/msg/detail"},method = RequestMethod.GET)
     public String getMessageDetail(Model model, @RequestParam("conversationId") String conversationId){
