@@ -31,3 +31,29 @@ CREATE TABLE `login_ticket` (
   `status` INT NULL DEFAULT 0, --状态，有效或无效等
   PRIMARY KEY (`id`),
   UNIQUE INDEX `ticket_UNIQUE` (`ticket` ASC));
+
+DROP TABLE IF EXISTS `comment`;
+CREATE TABLE `comment` (
+`id` INT NOT NULL AUTO_INCREMENT,
+`content` TEXT NOT NULL,
+`user_id` INT NOT NULL,
+`entity_id` INT NOT NULL,
+`entity_type` INT NOT NULL,
+`created_date` DATETIME NOT NULL,
+`status` INT NOT NULL DEFAULT 0,
+PRIMARY KEY (`id`),
+INDEX `entity_index` (`entity_id` ASC, `entity_type` ASC)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `message`;
+CREATE TABLE `message` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `from_id` int(11) NOT NULL,
+  `to_id` int(11) NOT NULL,
+  `content` text NOT NULL,
+  `created_date` datetime NOT NULL,
+  `has_read` int NOT NULL DEFAULT '0',
+  `conversation_id` varchar(15) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

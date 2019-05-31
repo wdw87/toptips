@@ -1,11 +1,10 @@
 package com.wdw.toptips;
 
+import com.wdw.toptips.dao.CommentDao;
 import com.wdw.toptips.dao.LoginTicketDAO;
 import com.wdw.toptips.dao.NewsDAO;
 import com.wdw.toptips.dao.UserDAO;
-import com.wdw.toptips.model.LoginTicket;
-import com.wdw.toptips.model.News;
-import com.wdw.toptips.model.User;
+import com.wdw.toptips.model.*;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,6 +28,10 @@ public class InitDatabaseTests {
 
     @Autowired
     LoginTicketDAO loginTicketDAO;
+
+    @Autowired
+    CommentDao commentDao;
+
     @Test
     public void initData() {
         Random random = new Random();
@@ -42,6 +45,7 @@ public class InitDatabaseTests {
 
             News news = new News();
 
+            news.setId( i + 1);
             news.setCommentCount(i);
             Date date = new Date();
             date.setTime(date.getTime() + 1000 * 3600 * 5 * i);
@@ -59,12 +63,24 @@ public class InitDatabaseTests {
 
             LoginTicket ticket = new LoginTicket();
             ticket.setStatus(0);
-            ticket.setUserId(i+1);
+            ticket.setUserId(i + 1);
             ticket.setExpired(date);
-            ticket.setTicket(String.format("TICKET%d",i+1));
+            ticket.setTicket(String.format("TICKET%d", i + 1));
             loginTicketDAO.addTicket(ticket);
 
-            loginTicketDAO.updateStatus(ticket.getTicket(),1);
+            loginTicketDAO.updateStatus(ticket.getTicket(), 1);
+
+
+            for(int j = 0; j< 3; j++){
+                Comment comment = new Comment();
+                comment.setContent("Content" + i);
+                comment.setUserId(i+1);
+                comment.setEntityType(EntityType.ENTITY_NEWS);
+                comment.setEntityId(news.getId());
+                comment.setCreatedDate(new Date());
+                comment.setStatus(0);
+                commentDao.addComment(comment);
+            }
         }
 
 
@@ -73,8 +89,8 @@ public class InitDatabaseTests {
         userDAO.deleteById(1);
         Assert.assertNull(userDAO.selectById(1));
 
-        Assert.assertEquals("TICKET2",loginTicketDAO.selectByTicket("TICKET2").getTicket());
-        
+        Assert.assertEquals("TICKET2", loginTicketDAO.selectByTicket("TICKET2").getTicket());
+
     }
 
 }

@@ -1,26 +1,46 @@
 package com.wdw.toptips.controller;
 
+<<<<<<< HEAD
 import com.wdw.toptips.model.Hostholder;
 import com.wdw.toptips.model.News;
 import com.wdw.toptips.service.NewsService;
 import com.wdw.toptips.service.QiniuService;
+=======
+import com.wdw.toptips.model.*;
+import com.wdw.toptips.service.CommentService;
+import com.wdw.toptips.service.NewsService;
+import com.wdw.toptips.service.QiniuService;
+import com.wdw.toptips.service.UserService;
+>>>>>>> 34c65ea0ff8caa03561eac7761316d9b480dc829
 import com.wdw.toptips.util.ToutiaoUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+<<<<<<< HEAD
 import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+=======
+import org.springframework.ui.Model;
+import org.springframework.util.StreamUtils;
+import org.springframework.web.bind.annotation.*;
+>>>>>>> 34c65ea0ff8caa03561eac7761316d9b480dc829
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+<<<<<<< HEAD
 import java.util.Date;
+=======
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+>>>>>>> 34c65ea0ff8caa03561eac7761316d9b480dc829
 
 /**
  * @Author: Wudw
@@ -36,11 +56,69 @@ public class NewsController {
     NewsService newsService;
 
     @Autowired
+<<<<<<< HEAD
     QiniuService qiniuService;
 
     @Autowired
     Hostholder hostholder;
 
+=======
+    UserService userService;
+
+    @Autowired
+    QiniuService qiniuService;
+
+    @Autowired
+    CommentService commentService;
+
+    @Autowired
+    Hostholder hostholder;
+
+    @RequestMapping(path = "/addComment", method = {RequestMethod.POST})
+    public String addComment(@RequestParam("newsId") int newsId,
+                             @RequestParam("content") String content) {
+        try {
+            Comment comment = new Comment();
+            comment.setUserId(hostholder.getUser().getId());
+            comment.setEntityId(newsId);
+            comment.setEntityType(EntityType.ENTITY_NEWS);
+            comment.setCreatedDate(new Date());
+            comment.setContent(content);
+            comment.setStatus(0);
+            commentService.addComment(comment);
+
+            int commentCount = commentService.getCommentCount(newsId, EntityType.ENTITY_NEWS);
+            newsService.updateCommentCount(commentCount,newsId);
+
+        }catch (Exception e){
+            logger.error("添加评论失败 " + e.getMessage());
+        }
+
+        return "redirect:/news/" + String.valueOf(newsId);
+    }
+
+    @RequestMapping(path = {"/news/{newsId}"}, method = {RequestMethod.GET})
+    public String addComment(@PathVariable("newsId") int newsId, Model model) {
+        News news = newsService.getNewsById(newsId);
+        if (news != null) {
+            //评论
+            List<Comment> comments = commentService.getCommentByEntity(news.getId(), EntityType.ENTITY_NEWS);
+            List<ViewObject> commentVOs = new ArrayList<>();
+            for (Comment comment : comments) {
+                ViewObject vo = new ViewObject();
+                vo.set("comment", comment);
+                vo.set("user", userService.getUser(comment.getUserId()));
+                commentVOs.add(vo);
+            }
+            model.addAttribute("commentVOs", commentVOs);
+        }
+        model.addAttribute("news", news);
+        model.addAttribute("owner", userService.getUser(news.getUserId()));
+        return "detail";
+    }
+
+
+>>>>>>> 34c65ea0ff8caa03561eac7761316d9b480dc829
     @RequestMapping(path = {"/image"}, method = {RequestMethod.GET})
     @ResponseBody
     public void getImg(@RequestParam("name") String name,
@@ -93,10 +171,16 @@ public class NewsController {
             newsService.addNews(news);
 
             return ToutiaoUtil.getJSONString(0);
+<<<<<<< HEAD
         }
         catch (Exception e){
             logger.error("添加资讯失败" + e.getMessage());
             return ToutiaoUtil.getJSONString(1,"发布失败");
+=======
+        } catch (Exception e) {
+            logger.error("添加资讯失败" + e.getMessage());
+            return ToutiaoUtil.getJSONString(1, "发布失败");
+>>>>>>> 34c65ea0ff8caa03561eac7761316d9b480dc829
         }
 
     }
