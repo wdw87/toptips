@@ -24,6 +24,10 @@ import java.util.Date;
 import java.util.List;
 
 /**
+ * 上传新闻和添加新闻评论的Controller
+ * 上传新闻主要包括两点内容：
+ * 1、将新闻图片上传至七牛云进行云存储
+ * 2、获取图片url，然后上传新闻
  * @Author: Wudw
  * @Date: 2019/5/23 20:45
  * @Version 1.0
@@ -48,50 +52,11 @@ public class NewsController {
     @Autowired
     Hostholder hostholder;
 
-    @RequestMapping(path = "/addComment", method = {RequestMethod.POST})
-    public String addComment(@RequestParam("newsId") int newsId,
-                             @RequestParam("content") String content) {
-        try {
-            Comment comment = new Comment();
-            comment.setUserId(hostholder.getUser().getId());
-            comment.setEntityId(newsId);
-            comment.setEntityType(EntityType.ENTITY_NEWS);
-            comment.setCreatedDate(new Date());
-            comment.setContent(content);
-            comment.setStatus(0);
-            commentService.addComment(comment);
-
-            int commentCount = commentService.getCommentCount(newsId, EntityType.ENTITY_NEWS);
-            newsService.updateCommentCount(commentCount,newsId);
-
-        }catch (Exception e){
-            logger.error("添加评论失败 " + e.getMessage());
-        }
-
-        return "redirect:/news/" + String.valueOf(newsId);
-    }
-
-    @RequestMapping(path = {"/news/{newsId}"}, method = {RequestMethod.GET})
-    public String addComment(@PathVariable("newsId") int newsId, Model model) {
-        News news = newsService.getNewsById(newsId);
-        if (news != null) {
-            //评论
-            List<Comment> comments = commentService.getCommentByEntity(news.getId(), EntityType.ENTITY_NEWS);
-            List<ViewObject> commentVOs = new ArrayList<>();
-            for (Comment comment : comments) {
-                ViewObject vo = new ViewObject();
-                vo.set("comment", comment);
-                vo.set("user", userService.getUser(comment.getUserId()));
-                commentVOs.add(vo);
-            }
-            model.addAttribute("commentVOs", commentVOs);
-        }
-        model.addAttribute("news", news);
-        model.addAttribute("owner", userService.getUser(news.getUserId()));
-        return "detail";
-    }
-
-
+    /**
+     * 测试用，将图片存到本地，现改为存到云服务器
+     * @param name
+     * @param response
+     */
     @RequestMapping(path = {"/image"}, method = {RequestMethod.GET})
     @ResponseBody
     public void getImg(@RequestParam("name") String name,
@@ -108,6 +73,11 @@ public class NewsController {
 
     }
 
+    /**
+     * 上传图片，由前端发起请求
+     * @param file MultipartFile，要上传的图片
+     * @return
+     */
     @RequestMapping(path = {"/uploadImage/"}, method = {RequestMethod.POST})
     @ResponseBody
     public String uploadImage(@RequestParam("file") MultipartFile file) {
@@ -122,7 +92,7 @@ public class NewsController {
             return ToutiaoUtil.getJSONString(1, "上传失败");
         }
     }
-
+    //添加新闻
     @RequestMapping(path = {"/user/addNews"}, method = {RequestMethod.POST})
     @ResponseBody
     public String addNews(@RequestParam("image") String image,

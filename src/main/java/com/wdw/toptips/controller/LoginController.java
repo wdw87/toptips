@@ -22,6 +22,15 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
+    /**
+     * 注册Controller
+     * @param model
+     * @param username 注册用户名
+     * @param password 注册密码
+     * @param rememberme 是否记住登陆
+     * @param response HttpServletResponse
+     * @return
+     */
     @RequestMapping(path = {"/reg"}, method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public String reg(Model model, @RequestParam("username") String username,
