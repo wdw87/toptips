@@ -79,11 +79,11 @@
                 </#if>
                 <div class="post">
                     <div class="votebar">
-                        <button class="click-like up" aria-pressed="false" onclick="myLike(${vo.get("news").id})" title="赞同">
+                        <button class="click-like up" aria-pressed="false" onclick="myLike(this ,${vo.get("news").id})" title="赞同">
                             <i class="vote-arrow"></i>
                             <span class="count">${vo.get("news").likeCount}</span>
                         </button>
-                        <button class="click-dislike down" aria-pressed="true" onclick="myDislike(${vo.get("news").id})"title="反对"><i class="vote-arrow"></i>
+                        <button class="click-dislike down" aria-pressed="true" onclick="myDislike(this,${vo.get("news").id})"title="反对"><i class="vote-arrow"></i>
                         </button>
                     </div>
                     <div class="content" data-url="http://nowcoder.com/posts/5l3hjr">
