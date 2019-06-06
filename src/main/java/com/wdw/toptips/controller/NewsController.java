@@ -1,46 +1,27 @@
 package com.wdw.toptips.controller;
 
-<<<<<<< HEAD
-import com.wdw.toptips.model.Hostholder;
-import com.wdw.toptips.model.News;
-import com.wdw.toptips.service.NewsService;
-import com.wdw.toptips.service.QiniuService;
-=======
 import com.wdw.toptips.model.*;
 import com.wdw.toptips.service.CommentService;
 import com.wdw.toptips.service.NewsService;
 import com.wdw.toptips.service.QiniuService;
 import com.wdw.toptips.service.UserService;
->>>>>>> 34c65ea0ff8caa03561eac7761316d9b480dc829
 import com.wdw.toptips.util.ToutiaoUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-<<<<<<< HEAD
-import org.springframework.util.StreamUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-=======
 import org.springframework.ui.Model;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
->>>>>>> 34c65ea0ff8caa03561eac7761316d9b480dc829
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-<<<<<<< HEAD
-import java.util.Date;
-=======
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
->>>>>>> 34c65ea0ff8caa03561eac7761316d9b480dc829
 
 /**
  * @Author: Wudw
@@ -56,13 +37,6 @@ public class NewsController {
     NewsService newsService;
 
     @Autowired
-<<<<<<< HEAD
-    QiniuService qiniuService;
-
-    @Autowired
-    Hostholder hostholder;
-
-=======
     UserService userService;
 
     @Autowired
@@ -118,7 +92,6 @@ public class NewsController {
     }
 
 
->>>>>>> 34c65ea0ff8caa03561eac7761316d9b480dc829
     @RequestMapping(path = {"/image"}, method = {RequestMethod.GET})
     @ResponseBody
     public void getImg(@RequestParam("name") String name,
@@ -171,16 +144,9 @@ public class NewsController {
             newsService.addNews(news);
 
             return ToutiaoUtil.getJSONString(0);
-<<<<<<< HEAD
-        }
-        catch (Exception e){
-            logger.error("添加资讯失败" + e.getMessage());
-            return ToutiaoUtil.getJSONString(1,"发布失败");
-=======
         } catch (Exception e) {
             logger.error("添加资讯失败" + e.getMessage());
             return ToutiaoUtil.getJSONString(1, "发布失败");
->>>>>>> 34c65ea0ff8caa03561eac7761316d9b480dc829
         }
 
     }

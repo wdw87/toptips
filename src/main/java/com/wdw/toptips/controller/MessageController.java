@@ -18,17 +18,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.swing.text.View;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 /**
+ * 站内信Controller
  * @Author: Wudw
  * @Date: 2019/5/29 21:21
  * @Version 1.0
  */
-
 @Controller
 public class MessageController {
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
@@ -42,11 +41,16 @@ public class MessageController {
     @Autowired
     Hostholder hostholder;
 
+    /**
+     * 获取站内信列表
+     * @param model
+     * @return
+     */
     @RequestMapping(path = {"/msg/list"},method = RequestMethod.GET)
-    public String getMessageList(Model model, @RequestParam("userId") int userId){
+    public String getMessageList(Model model){
         try{
-            if(hostholder.getUser() == null || hostholder.getUser().getId() != userId){
-                return "redirect:/";
+            if(hostholder.getUser() == null){
+                return "redirect:/";//没有登陆，返回主页
             }
             int localUserId = hostholder.getUser().getId();
             List<ViewObject> conversations = new ArrayList<>();
@@ -54,7 +58,7 @@ public class MessageController {
             for(Message msg : conversationList){
                 ViewObject vo = new ViewObject();
                 vo.set("msg",msg);
-                int targetId = (msg.getFromId() == localUserId? localUserId:msg.getFromId());
+                int targetId = msg.getFromId() == localUserId? localUserId:msg.getFromId();
                 User user = userService.getUser(targetId);
                 vo.set("user",user);
                 String conversationId = msg.getConversationId();
@@ -70,6 +74,12 @@ public class MessageController {
         return "letter";
     }
 
+    /**
+     * 站内信详情
+     * @param model
+     * @param conversationId
+     * @return
+     */
     @RequestMapping(path = {"/msg/detail"},method = RequestMethod.GET)
     public String getMessageDetail(Model model, @RequestParam("conversationId") String conversationId){
 
@@ -94,7 +104,13 @@ public class MessageController {
 
     }
 
-
+    /**
+     *发送消息，由前端发起请求
+     * @param fromId 发送人id
+     * @param toId  收信人id
+     * @param content 消息内容
+     * @return
+     */
     @RequestMapping(path = {"/msg/addMessage"},method = RequestMethod.POST)
     @ResponseBody
     public String addMessage(@RequestParam("fromId") int fromId,
@@ -111,8 +127,8 @@ public class MessageController {
             messageService.addMessage(message);
             return ToutiaoUtil.getJSONString(message.getId());
         }catch (Exception e){
-            logger.error("插入评论失败 " + e.getMessage());
-            return ToutiaoUtil.getJSONString(1,"插入评论失败");
+            logger.error("插入消息失败 " + e.getMessage());
+            return ToutiaoUtil.getJSONString(1,"插入消息失败");
         }
     }
 
