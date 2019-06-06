@@ -22,6 +22,8 @@
     <script type="text/javascript" src="/scripts/main/component/upload.js"></script>
     <script type="text/javascript" src="/scripts/main/component/popupUpload.js"></script>
 
+    <script type="text/javascript" src="/scripts/like.js"></script>
+
 
 </head>
 <body class="welcome_index">
@@ -50,6 +52,7 @@
 <#--                    <li class="js-share"><a href="javascript:void(0);">分享</a></li>-->
                     <li class=""><a href="/msg/list">站内信</a></li>
                     <li class=""><a href="javascript:void(0);">${user.name}</a></li>
+                    <li class=""><a href="/logout;">注销</a></li>
                 <#else>
                     <li class="js-login"><a href="login.html">登陆</a></li>
 <#--                    <li class="js-login"><a href="javascript:void(0);">登陆</a></li>-->
