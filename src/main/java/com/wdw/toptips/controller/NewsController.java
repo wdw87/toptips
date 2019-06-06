@@ -48,49 +48,6 @@ public class NewsController {
     @Autowired
     Hostholder hostholder;
 
-    @RequestMapping(path = "/addComment", method = {RequestMethod.POST})
-    public String addComment(@RequestParam("newsId") int newsId,
-                             @RequestParam("content") String content) {
-        try {
-            Comment comment = new Comment();
-            comment.setUserId(hostholder.getUser().getId());
-            comment.setEntityId(newsId);
-            comment.setEntityType(EntityType.ENTITY_NEWS);
-            comment.setCreatedDate(new Date());
-            comment.setContent(content);
-            comment.setStatus(0);
-            commentService.addComment(comment);
-
-            int commentCount = commentService.getCommentCount(newsId, EntityType.ENTITY_NEWS);
-            newsService.updateCommentCount(commentCount,newsId);
-
-        }catch (Exception e){
-            logger.error("添加评论失败 " + e.getMessage());
-        }
-
-        return "redirect:/news/" + String.valueOf(newsId);
-    }
-
-    @RequestMapping(path = {"/news/{newsId}"}, method = {RequestMethod.GET})
-    public String addComment(@PathVariable("newsId") int newsId, Model model) {
-        News news = newsService.getNewsById(newsId);
-        if (news != null) {
-            //评论
-            List<Comment> comments = commentService.getCommentByEntity(news.getId(), EntityType.ENTITY_NEWS);
-            List<ViewObject> commentVOs = new ArrayList<>();
-            for (Comment comment : comments) {
-                ViewObject vo = new ViewObject();
-                vo.set("comment", comment);
-                vo.set("user", userService.getUser(comment.getUserId()));
-                commentVOs.add(vo);
-            }
-            model.addAttribute("commentVOs", commentVOs);
-        }
-        model.addAttribute("news", news);
-        model.addAttribute("owner", userService.getUser(news.getUserId()));
-        return "detail";
-    }
-
 
     @RequestMapping(path = {"/image"}, method = {RequestMethod.GET})
     @ResponseBody
