@@ -4,8 +4,8 @@
             <div class="post detail">
 
                 <div class="votebar">
-                    <button class="click-like up" aria-pressed="false" onclick="myLike(${news.id})" title="赞同"><i class="vote-arrow"></i><span class="count">${news.likeCount}</span></button>
-                    <button class="click-dislike down" aria-pressed="true" onclick="myDislike(${news.id})" title="反对"><i class="vote-arrow"></i>
+                    <button class="click-like up" aria-pressed="false" onclick="myLike(this,${news.id})" title="赞同"><i class="vote-arrow"></i><span class="count">${news.likeCount}</span></button>
+                    <button class="click-dislike down" aria-pressed="true" onclick="myDislike(this,${news.id})" title="反对"><i class="vote-arrow"></i>
                     </button>
                 </div>
 
