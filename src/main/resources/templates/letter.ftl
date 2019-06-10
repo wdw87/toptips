@@ -31,7 +31,7 @@
                             ${conversation.get("user").name}
                         </a>
                         <p class="letter-brief">
-                            <a href="/msg/detail?conversationId==${conversation.get("msg").conversationId}">
+                            <a href="/msg/detail?conversationId=${conversation.get("msg").conversationId}">
                                 ${conversation.get("msg").content}
                             </a>
                         </p>

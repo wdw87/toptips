@@ -1,5 +1,8 @@
 package com.wdw.toptips.controller;
 
+import com.wdw.toptips.async.EventModel;
+import com.wdw.toptips.async.EventProducer;
+import com.wdw.toptips.async.EventType;
 import com.wdw.toptips.model.EntityType;
 import com.wdw.toptips.model.Hostholder;
 import com.wdw.toptips.service.LikeService;
@@ -30,6 +33,9 @@ public class likeController {
     @Autowired
     NewsService newsService;
 
+    @Autowired
+    EventProducer eventProducer;
+
     @RequestMapping(path = {"/like"}, method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public String like(@RequestParam(value = "newsId") int newsId) {
@@ -37,6 +43,14 @@ public class likeController {
             int userId = hostholder.getUser().getId();
             long likeCount = likeService.like(userId, EntityType.ENTITY_NEWS, newsId);
             newsService.updateLikeCount((int) likeCount, newsId);
+
+            eventProducer.fireEvent(new EventModel(EventType.LIKE)
+                    .setActorId(hostholder.getUser().getId())
+                    .setEntityId(newsId)
+                    .setEntityType(EntityType.ENTITY_NEWS)
+                    .setEntityOwnerId(newsService.getNewsById(newsId).getId())
+            );
+
             return ToutiaoUtil.getJSONString(0, String.valueOf(likeCount));
         }else{
             return ToutiaoUtil.getJSONString(1, "请先登录");
