@@ -57,6 +57,7 @@ public class UserService {
         userDAO.addUser(user);
         //4、下发ticket，实现单点登陆
         map.put("ticket", addLoginTicket(user.getId()));
+        map.put("userId", user.getId());
         return map;
     }
 

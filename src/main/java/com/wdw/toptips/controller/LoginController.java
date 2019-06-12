@@ -1,6 +1,9 @@
 package com.wdw.toptips.controller;
 
 
+import com.wdw.toptips.async.EventModel;
+import com.wdw.toptips.async.EventProducer;
+import com.wdw.toptips.async.EventType;
 import com.wdw.toptips.service.UserService;
 import com.wdw.toptips.util.ToutiaoUtil;
 import org.slf4j.Logger;
@@ -21,6 +24,9 @@ public class LoginController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private EventProducer eventProducer;
 
     /**
      * 注册Controller
@@ -47,7 +53,11 @@ public class LoginController {
                     cookie.setMaxAge(3600 * 24 * 7);
                 }
                 response.addCookie(cookie);
-
+                eventProducer.fireEvent(new EventModel(EventType.REGISTE)
+                        .setActorId((int)map.get("userId"))
+                        .setExt("username",username)
+                        .setExt("email","694439986@qq.com")
+                );
                 return ToutiaoUtil.getJSONString(0, "注册成功");
             } else {
                 //注册异常，code=1，这里的code涉及到与前端的交互，必须正确
