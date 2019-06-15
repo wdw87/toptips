@@ -21,7 +21,7 @@ public class EventProducer {
     JedisAdapter jedisAdapter;
 
     /**
-     * 将事件序列化为json串，添加到事件队列中
+     * 生产事件，将事件序列化为json串，添加到事件队列中
      * @param model
      * @return
      */

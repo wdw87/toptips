@@ -44,6 +44,10 @@ public class LikeHandler implements EventHandler {
         messageService.addMessage(message);
     }
 
+    /**
+     * 返回该事件处理函数要处理的事件类型
+     * @return
+     */
     @Override
     public List<EventType> getSupportEventTypes() {
         return Arrays.asList(EventType.LIKE);

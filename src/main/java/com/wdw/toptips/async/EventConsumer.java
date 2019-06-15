@@ -26,6 +26,7 @@ import java.util.Map;
 public class EventConsumer implements InitializingBean, ApplicationContextAware {
 
     private static final Logger logger = LoggerFactory.getLogger(EventConsumer.class);
+    //将所有事件类型和它对应的handler关联起来
     private Map<EventType,List<EventHandler>> config = new HashMap<>();
     private ApplicationContext applicationContext;
 
@@ -38,7 +39,7 @@ public class EventConsumer implements InitializingBean, ApplicationContextAware 
         Map<String,EventHandler> beans = applicationContext.getBeansOfType(EventHandler.class);
         if(beans != null){
             for(Map.Entry<String,EventHandler> entry : beans.entrySet()){
-                //获取该事件
+                //获取该EventHandler需要处理的事件类型
                 List<EventType> eventTypeList = entry.getValue().getSupportEventTypes();
                 for(EventType type : eventTypeList){
                     if(!config.containsKey(type)){

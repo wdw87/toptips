@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 事件模型
  * @Author: Wudw
  * @Date: 2019/6/10 21:36
  * @Version 1.0
