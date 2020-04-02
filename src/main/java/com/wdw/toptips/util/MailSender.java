@@ -62,8 +62,8 @@ public class MailSender implements InitializingBean {
         mailSender = new JavaMailSenderImpl();
 
         // 请输入自己的邮箱和密码，用于发送邮件
-        mailSender.setUsername("1406024115@st.nuc.edu.cn");
-        mailSender.setPassword("3346535");
+        mailSender.setUsername("xxxxxxx@mail.com");
+        mailSender.setPassword("xxxxxxx");
         mailSender.setHost("smtp.exmail.qq.com");
         // 请配置自己的邮箱和密码
 
