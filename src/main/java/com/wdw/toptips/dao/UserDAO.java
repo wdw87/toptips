@@ -2,11 +2,13 @@ package com.wdw.toptips.dao;
 
 import com.wdw.toptips.model.User;
 import org.apache.ibatis.annotations.*;
+import org.springframework.stereotype.Component;
 
 /**
  * 添加了@Mapper注解的接口在编译时回生成相应的类
  */
 @Mapper
+@Component
 public interface UserDAO {
     String TABLE_NAME = "user";
     String INSERT_FIELDS = " name, password, salt, head_url ";

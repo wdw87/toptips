@@ -48,6 +48,7 @@ public class LoginController {
             if (map.containsKey("ticket")) {
                 Cookie cookie = new Cookie("ticket", map.get("ticket").toString());
                 cookie.setPath("/");
+                cookie.setHttpOnly(true);
                 //如果记住登陆，设置cookie生存时间
                 if (rememberme > 0) {
                     cookie.setMaxAge(3600 * 24 * 7);

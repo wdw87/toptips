@@ -1,5 +1,8 @@
 package com.wdw.toptips.util;
 
+import com.wdw.toptips.model.LoginTicket;
+import com.wdw.toptips.model.User;
+
 /**
  * 生成redis的key
  * @Author: Wudw
@@ -12,6 +15,10 @@ public class RedisKeyUtil {
     private static String BIZ_DISLIKE = "DISLIKE";
     private static String BIZ_EVENT = "EVENT";
 
+    private static String TICKET = "TICKET";
+
+
+
     public static String getEventQueueKey(){
         return BIZ_EVENT;
     }
@@ -23,5 +30,8 @@ public class RedisKeyUtil {
         return BIZ_DISLIKE + SPLIT + String.valueOf(entityType) + SPLIT + String.valueOf(entityId);
     }
 
+    public static String getTicketKey(String ticket){
+        return TICKET + SPLIT + ticket;
+    }
 
 }

@@ -1,5 +1,6 @@
 package com.wdw.toptips.controller;
 
+import com.wdw.toptips.async.EventProducer;
 import com.wdw.toptips.dao.UserDAO;
 import com.wdw.toptips.model.Hostholder;
 import com.wdw.toptips.model.Message;
@@ -41,6 +42,8 @@ public class MessageController {
     @Autowired
     Hostholder hostholder;
 
+    @Autowired
+    EventProducer eventProducer;
     /**
      * 获取站内信列表
      * @param model

@@ -1,10 +1,13 @@
 package com.wdw.toptips.interceptor;
 
+import com.alibaba.fastjson.JSON;
 import com.wdw.toptips.dao.LoginTicketDAO;
 import com.wdw.toptips.dao.UserDAO;
 import com.wdw.toptips.model.Hostholder;
 import com.wdw.toptips.model.LoginTicket;
 import com.wdw.toptips.model.User;
+import com.wdw.toptips.util.JedisAdapter;
+import com.wdw.toptips.util.RedisKeyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -34,6 +37,9 @@ public class PassportInterceptor implements HandlerInterceptor {
     @Autowired
     private Hostholder hostholder;
 
+    @Autowired
+    JedisAdapter jedisAdapter;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String ticket = null;
@@ -45,17 +51,25 @@ public class PassportInterceptor implements HandlerInterceptor {
                 }
             }
         }
-        if (ticket == null) {
-            return true;
-        } else {
-            LoginTicket loginTicket = loginTicketDAO.selectByTicket(ticket);
-            if (loginTicket == null ||
-                    loginTicket.getExpired().before(new Date()) ||
-                    loginTicket.getStatus() != 0 ||
-                    userDAO.selectById(loginTicket.getUserId()) == null) {
+//        if (ticket == null) {
+////            return true;
+////        } else {
+////            LoginTicket loginTicket = loginTicketDAO.selectByTicket(ticket);
+////            if (loginTicket == null ||
+////                    loginTicket.getExpired().before(new Date()) ||
+////                    loginTicket.getStatus() != 0 ||
+////                    userDAO.selectById(loginTicket.getUserId()) == null) {
+////                return true;
+////            }
+////            User user = userDAO.selectById(loginTicket.getUserId());
+////            hostholder.setUser(user);
+////        }
+        if(ticket != null){
+            String json = jedisAdapter.get(RedisKeyUtil.getTicketKey(ticket));
+            if(json == null){
                 return true;
             }
-            User user = userDAO.selectById(loginTicket.getUserId());
+            User user = JSON.parseObject(json, User.class);
             hostholder.setUser(user);
         }
         return true;

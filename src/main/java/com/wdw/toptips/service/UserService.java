@@ -1,9 +1,12 @@
 package com.wdw.toptips.service;
 
+import com.alibaba.fastjson.JSON;
 import com.wdw.toptips.dao.LoginTicketDAO;
 import com.wdw.toptips.dao.UserDAO;
 import com.wdw.toptips.model.LoginTicket;
 import com.wdw.toptips.model.User;
+import com.wdw.toptips.util.JedisAdapter;
+import com.wdw.toptips.util.RedisKeyUtil;
 import com.wdw.toptips.util.ToutiaoUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,9 @@ public class UserService {
 
     @Autowired
     private LoginTicketDAO loginTicketDAO;
+
+    @Autowired
+    private JedisAdapter jedisAdapter;
 
     /**
      * 封装了登陆过程对用户名和密码进行判断的相关代码：
@@ -56,7 +62,7 @@ public class UserService {
         user.setPassword(ToutiaoUtil.MD5(passsword + user.getSalt()));
         userDAO.addUser(user);
         //4、下发ticket，实现单点登陆
-        map.put("ticket", addLoginTicket(user.getId()));
+        map.put("ticket", addLoginTicket(user));
         map.put("userId", user.getId());
         return map;
     }
@@ -89,7 +95,9 @@ public class UserService {
         }
         //add ticket
         //登陆
-        map.put("ticket", addLoginTicket(user.getId()));
+//        map.put("ticket", addLoginTicket(user.getId()));
+        //使用Redis缓存ticket
+        map.put("ticket", addLoginTicket(user));
         return map;
     }
 
@@ -99,7 +107,8 @@ public class UserService {
      * @param ticket
      */
     public void logout(String ticket) {
-        loginTicketDAO.updateStatus(ticket, 1);
+//        loginTicketDAO.updateStatus(ticket, 1);
+        jedisAdapter.del(RedisKeyUtil.getTicketKey(ticket));
     }
 
     /**
@@ -118,6 +127,16 @@ public class UserService {
         loginTicketDAO.addTicket(ticket);
         return ticket.getTicket();
     }
+
+    private String addLoginTicket(User user) {
+        LoginTicket ticket = new LoginTicket();
+        Date date = new Date();
+        date.setTime(date.getTime() + 1000 * 3600 * 24);
+        ticket.setTicket(UUID.randomUUID().toString().replaceAll("-", ""));
+        jedisAdapter.set(RedisKeyUtil.getTicketKey(ticket.getTicket()), JSON.toJSONString(user), 1000 * 3600 * 24);
+        return ticket.getTicket();
+    }
+
 
     public User getUser(int id) {
         return userDAO.selectById(id);

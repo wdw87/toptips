@@ -1,5 +1,8 @@
 package com.wdw.toptips.controller;
 
+import com.wdw.toptips.async.EventModel;
+import com.wdw.toptips.async.EventProducer;
+import com.wdw.toptips.async.EventType;
 import com.wdw.toptips.model.*;
 import com.wdw.toptips.service.CommentService;
 import com.wdw.toptips.service.NewsService;
@@ -41,6 +44,8 @@ public class CommentController {
     @Autowired
     Hostholder hostholder;
 
+    @Autowired
+    EventProducer eventProducer;
     /**
      * 添加新闻评论，由前端向"/addComment"发起请求
      * @param newsId  新闻id
@@ -51,20 +56,32 @@ public class CommentController {
     public String addComment(@RequestParam("newsId") int newsId,
                              @RequestParam("content") String content) {
         try {
-            Comment comment = new Comment();
-            comment.setUserId(hostholder.getUser().getId());
-            comment.setEntityId(newsId);
-            comment.setEntityType(EntityType.ENTITY_NEWS);
-            comment.setCreatedDate(new Date());
-            comment.setContent(content);
-            comment.setStatus(0);
-            commentService.addComment(comment);
+//            Comment comment = new Comment();
+//            comment.setUserId(hostholder.getUser().getId());
+//            comment.setEntityId(newsId);
+//            comment.setEntityType(EntityType.ENTITY_NEWS);
+//            comment.setCreatedDate(new Date());
+//            comment.setContent(content);
+//            comment.setStatus(0);
+//
+//
+//
+//            commentService.addComment(comment);
+//
+//            //获取评论数量，对评论数量进行更新，后续需实现异步更新
+//            int commentCount = commentService.getCommentCount(newsId, EntityType.ENTITY_NEWS);
+//            newsService.updateCommentCount(commentCount,newsId);
+//            //........
 
-            //获取评论数量，对评论数量进行更新，后续需实现异步更新
-            int commentCount = commentService.getCommentCount(newsId, EntityType.ENTITY_NEWS);
-            newsService.updateCommentCount(commentCount,newsId);
-            //........
-
+            eventProducer.fireEvent(new EventModel(EventType.COMMENT)
+                    .setActorId(hostholder.getUser().getId())
+                    .setEntityId(newsId)
+                    .setEntityType(EntityType.ENTITY_NEWS)
+                    .setEntityOwnerId(newsId)
+                    .setExt("content", content)
+                    .setExt("date", new Date().toString())
+                    .setExt("status", "0")
+            );
         }catch (Exception e){
             logger.error("添加评论失败 " + e.getMessage());
         }

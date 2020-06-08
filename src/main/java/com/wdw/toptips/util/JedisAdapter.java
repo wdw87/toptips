@@ -8,6 +8,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.params.SetParams;
 
 import java.util.List;
 
@@ -53,6 +54,30 @@ public class JedisAdapter implements InitializingBean {
             }
         }
     }
+
+    public String set(String key, String value, long time){
+        Jedis jedis = new Jedis();
+        try{
+            jedis = pool.getResource();
+            SetParams setParams = new SetParams();
+            setParams.px(time);
+            return jedis.set(key, value, setParams);
+        }finally {
+            jedis.close();
+        }
+    }
+
+    public long del(String key){
+        Jedis jedis = new Jedis();
+        try{
+            jedis = pool.getResource();
+            return jedis.del(key);
+        }finally {
+            jedis.close();
+        }
+    }
+
+
     public long srem(String key,String value){
         Jedis jedis = new Jedis();
         try {
