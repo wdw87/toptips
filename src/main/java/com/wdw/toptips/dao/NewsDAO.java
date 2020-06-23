@@ -3,10 +3,12 @@ package com.wdw.toptips.dao;
 import com.wdw.toptips.model.News;
 import com.wdw.toptips.model.User;
 import org.apache.ibatis.annotations.*;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Mapper
+@Component
 public interface NewsDAO {
     String TABLE_NAME = "news";
     String INSERT_FIELDS = " title, link, image, like_count, comment_count, created_date, user_id ";
@@ -27,4 +29,7 @@ public interface NewsDAO {
 
     @Update({"update ", TABLE_NAME, " set like_count=#{likeCount} where id=#{id}"})
     void updateNewsLikeCount(@Param("likeCount") int likeCount,@Param("id") int id);
+
+    @Select({"SELECT like_count from ",TABLE_NAME," where id = #{id}"})
+    int selectLikeCount(@Param("id") int id);
 }

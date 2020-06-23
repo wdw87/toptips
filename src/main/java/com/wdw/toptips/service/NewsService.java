@@ -2,6 +2,8 @@ package com.wdw.toptips.service;
 
 import com.wdw.toptips.dao.NewsDAO;
 import com.wdw.toptips.model.News;
+import com.wdw.toptips.util.JedisAdapter;
+import com.wdw.toptips.util.RedisKeyUtil;
 import com.wdw.toptips.util.ToutiaoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,8 +21,19 @@ public class NewsService {
     @Autowired
     private NewsDAO newsDao;
 
+    @Autowired
+    private JedisAdapter jedisAdapter;
+
     public List<News> getLatestNews(int userId, int offset, int limit) {
-        return newsDao.selectByUserIdAndOffset(userId, offset, limit);
+        List<News> list =  newsDao.selectByUserIdAndOffset(userId, offset, limit);
+        for(News news : list){
+            String key = RedisKeyUtil.getLikeCountKey(news.getId());
+            String cachedCount = jedisAdapter.get(key);
+            if(cachedCount != null){
+                news.setLikeCount(news.getLikeCount() + Integer.parseInt(cachedCount));
+            }
+        }
+        return list;
     }
 
     public int addNews(News news){
@@ -36,8 +49,15 @@ public class NewsService {
         newsDao.updateNewsLikeCount(likeCount,id);
     }
 
+
     public News getNewsById(int newsId){
-        return newsDao.selectById(newsId);
+        News news =  newsDao.selectById(newsId);
+        String key = RedisKeyUtil.getLikeCountKey(news.getId());
+        String cachedCount = jedisAdapter.get(key);
+        if(cachedCount != null){
+            news.setLikeCount(news.getLikeCount() + Integer.parseInt(cachedCount));
+        }
+        return news;
     }
 
     /**

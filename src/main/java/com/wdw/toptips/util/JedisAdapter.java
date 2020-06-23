@@ -10,7 +10,9 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.params.SetParams;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @Author: Wudw
@@ -23,24 +25,40 @@ public class JedisAdapter implements InitializingBean {
 
     private JedisPool pool= null;
 
-
-//    public static void print(int index,Object object){
-//        System.out.println(String.format("%d,%s",index, object.toString()));
-//    }
-//    public static void main(String[] args) {
-//        Jedis jedis = new Jedis();
-//        jedis.flushAll();
-//        jedis.set("hello","word");
-//        print(1,jedis.get("hello"));
-//        jedis.rename("hello","newhello");
-//        print(2,jedis.get("newhello"));
-//    }
-
     @Override
     public void afterPropertiesSet() throws Exception {
         pool = new JedisPool("localhost",6379);
     }
-    public long sadd(String key,String value){
+
+    public long incr(String key){
+        Jedis jedis = new Jedis();
+        try {
+            jedis = pool.getResource();
+            return jedis.incr(key);
+        }catch (Exception e){
+            logger.error("Jedis发生异常 " + e.getMessage());
+            return 0;
+        }finally{
+            if(jedis != null){
+                jedis.close();
+            }
+        }
+    }
+    public long decr(String key){
+        Jedis jedis = new Jedis();
+        try {
+            jedis = pool.getResource();
+            return jedis.decr(key);
+        }catch (Exception e){
+            logger.error("Jedis发生异常 " + e.getMessage());
+            return 0;
+        }finally{
+            if(jedis != null){
+                jedis.close();
+            }
+        }
+    }
+    public long sadd(String key,String... value){
         Jedis jedis = new Jedis();
         try {
             jedis = pool.getResource();
@@ -48,6 +66,63 @@ public class JedisAdapter implements InitializingBean {
         }catch (Exception e){
             logger.error("Jedis发生异常 " + e.getMessage());
             return 0;
+        }finally{
+            if(jedis != null){
+                jedis.close();
+            }
+        }
+    }
+
+    public long srem(String key,String value){
+        Jedis jedis = new Jedis();
+        try {
+            jedis = pool.getResource();
+            return jedis.srem(key,value);
+        }catch (Exception e){
+            logger.error("Jedis发生异常 " + e.getMessage());
+            return 0;
+        }finally{
+            if(jedis != null){
+                jedis.close();
+            }
+        }
+    }
+    public Set<String> smembers(String key){
+        Jedis jedis = new Jedis();
+        try {
+            jedis = pool.getResource();
+            return jedis.smembers(key);
+        }catch (Exception e){
+            logger.error("Jedis发生异常 " + e.getMessage());
+            return new HashSet<String>();
+        }finally{
+            if(jedis != null){
+                jedis.close();
+            }
+        }
+    }
+    public String spop(String key){
+        Jedis jedis = new Jedis();
+        try {
+            jedis = pool.getResource();
+            return jedis.spop(key);
+        }catch (Exception e){
+            logger.error("Jedis发生异常 " + e.getMessage());
+            return null;
+        }finally{
+            if(jedis != null){
+                jedis.close();
+            }
+        }
+    }
+    public boolean exists(String key){
+        Jedis jedis = new Jedis();
+        try {
+            jedis = pool.getResource();
+            return jedis.exists(key);
+        }catch (Exception e){
+            logger.error("Jedis发生异常 " + e.getMessage());
+            return false;
         }finally{
             if(jedis != null){
                 jedis.close();
@@ -77,21 +152,6 @@ public class JedisAdapter implements InitializingBean {
         }
     }
 
-
-    public long srem(String key,String value){
-        Jedis jedis = new Jedis();
-        try {
-            jedis = pool.getResource();
-            return jedis.srem(key,value);
-        }catch (Exception e){
-            logger.error("Jedis发生异常 " + e.getMessage());
-            return 0;
-        }finally{
-            if(jedis != null){
-                jedis.close();
-            }
-        }
-    }
     public boolean sismember(String key,String value){
         Jedis jedis = new Jedis();
         try {
@@ -189,5 +249,18 @@ public class JedisAdapter implements InitializingBean {
         return null;
     }
 
-
+    public Object eval(String script, List<String> keys, List<String> args){
+        Jedis jedis = new Jedis();
+        try {
+            jedis = pool.getResource();
+            return jedis.eval(script, keys, args);
+        }catch (Exception e){
+            logger.error("Jedis发生异常 " + e.getMessage());
+            return null;
+        }finally{
+            if(jedis != null){
+                jedis.close();
+            }
+        }
+    }
 }

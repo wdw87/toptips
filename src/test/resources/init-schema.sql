@@ -22,6 +22,15 @@ CREATE TABLE `news` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `user_like_news`;
+CREATE TABLE `user_like_news` (
+    `news_id` int(11) unsigned NOT NULL,
+    `user_id` int(11) unsigned NOT NULL,
+    `status` int NOT NULL ,
+    `created_date` datetime NOT NULL,
+  PRIMARY KEY (`news_id`, `user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 DROP TABLE IF EXISTS `login_ticket`;
 CREATE TABLE `login_ticket` (
   `id` INT NOT NULL AUTO_INCREMENT,

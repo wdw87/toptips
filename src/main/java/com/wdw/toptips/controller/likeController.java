@@ -42,7 +42,7 @@ public class likeController {
         if(hostholder.getUser() != null) {
             int userId = hostholder.getUser().getId();
             long likeCount = likeService.like(userId, EntityType.ENTITY_NEWS, newsId);
-            newsService.updateLikeCount((int) likeCount, newsId);
+            //newsService.updateLikeCount((int) likeCount, newsId);
 
             eventProducer.fireEvent(new EventModel(EventType.LIKE)
                     .setActorId(hostholder.getUser().getId())
@@ -62,7 +62,7 @@ public class likeController {
         if(hostholder.getUser() != null) {
             int userId = hostholder.getUser().getId();
             long likeCount = likeService.dislike(userId, EntityType.ENTITY_NEWS, newsId);
-            newsService.updateLikeCount((int) likeCount, newsId);
+            //newsService.updateLikeCount((int) likeCount, newsId);
             return ToutiaoUtil.getJSONString(0, String.valueOf(likeCount));
         }else{
             return ToutiaoUtil.getJSONString(1, "请先登录");
